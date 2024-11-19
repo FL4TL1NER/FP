@@ -16,16 +16,16 @@ import scala.io.StdIn.readLine
 }
 
 // 1. 
-def integrate(f: Double=>Double,L: Double,R: Double,I: Int): Double = {
-  val step: Double = (R-L)/I
-  val values = Range(0,I).map(L + step/2 + step*_).map(f(_)*step)
+def integrate(f: Double=>Double, l: Double, r: Double, i: Int): Double = {
+  val step: Double = (r-l)/i
+  val values = Range(0,i).map(l + step/2 + step*_).map(f(_)*step)
   return values.reduce(_ + _)
 }
 
 //дописал после лабы
-def integrateConcurent(f: Double=>Double,L: Double,R: Double,I: Int,T: Int): Double = {
-  val step: Double = (R-L)/T
-  val futures: Seq[Future[Double]] = Range(0,T).map((i: Int) => Future {integrate(f,L+step*i,L+step*(i+1),I)})
+def integrateConcurent(f: Double=>Double, l: Double, r: Double, i: Int, t: Int): Double = {
+  val step: Double = (r-l)/t
+  val futures: Seq[Future[Double]] = Range(0,t).map((i: Int) => Future {integrate(f,l+step*i,l+step*(i+1),i)})
   val future: Future[Seq[Double]] = Future.sequence(futures)
   val res = Await.result(future,1.second)
   return res.fold(0.0)(_ + _)
@@ -41,7 +41,7 @@ val UPPERCASE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 val NUMBERS_LETTERS = "1234567890"
 val SPECIAL_LETTERS = "!@#$%^&*()[]{};:,./<>?|"
 
-def hasNSymbols(a:String,set:String, n:Int): Boolean = a.filter(set.contains(_)).length() >= n
+def hasNSymbols(passwordCandidate: String, someLetters: String, n:Int): Boolean = passwordCandidate.count(someLetters.contains(_)) >= n
 
 // Не понимаю зачем тут Option, и без него элегантное решение
 def goodEnoughPassword(password:String): Boolean = {
@@ -67,11 +67,13 @@ def goodEnoughPassword_v2(password:String): Either[Boolean, String] = {
                                     case Success(value) => false})
           .isEmpty then return Left(false)
   
-  var errors = reqs.filter((a,b) => b match {case Failure(exception) => false // выписываем все ошибки в errors
-                                             case Success(value) => !value})
-                   .map((a,b) => a)
-                   .foldRight("")(_ + " " + _)
-  if errors.length() == 0 then Left(true) else Right(errors) // если есть хоть одна ошибка возвращаем строку с ошибками, иначе у нас все хорошо
+  if reqs.filter((a,b) => b match {case Failure(exception) => true // 
+                                   case Success(value) => !value})
+          .isEmpty
+  then Left(true)
+  else Right(reqs.filter((a,b) => b match {case Failure(exception) => false
+                                           case Success(value) => !value})
+                 .map((a,b)=>a).fold("")(_ + _))
 }
 
 // def readPassword(): Future[String]
@@ -94,7 +96,7 @@ def readPassword(): Future[String] = {
     input
   })
   res.onComplete((a: Try[String]) => a match {case Success(value) => {printf(value)}
-                                              case Failure(exception) => printf("Failed lol")})
+                                              case Failure(exception) => {printf("Failed lol")}})
   res
 }
 
