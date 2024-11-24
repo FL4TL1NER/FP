@@ -4,12 +4,16 @@ import akka.actor.typed.ActorRef
 import akka.actor.typed.ActorSystem
 import akka.actor.typed.Behavior
 import akka.actor.typed.scaladsl.Behaviors
+
 import scala.util.Random
+
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object ActorServer:
     case class Message(a: Int, b: Int, replyTo: ActorRef[Int])
     def apply(): Behavior[Message] = Behaviors.receive { (context, message) =>
-        print(message.a); print(' '); print(message.b); print('\n')
+        context.log.info(message.a.toString() + ' ' + message.b.toString() + '\n')
         message.replyTo ! message.a + message.b
         Behaviors.same
     }
@@ -17,10 +21,14 @@ object ActorServer:
 object ActorClient:
     def apply(serverRef: ActorRef[ActorServer.Message]): Behavior[Int] = Behaviors.setup { (context) =>
         val server = serverRef
+        val senderFuture: Future[Unit] = Future {
+            while (true) {
+                server ! ActorServer.Message(Random.between(0,1000),Random.between(0,1000),context.self)
+                Thread.sleep(1000)
+            }
+        }
         Behaviors.receiveMessage { (message) =>
-            print(message); print('\n')
-            Thread.sleep(1000)
-            server ! ActorServer.Message(Random.between(0,1000),Random.between(0,1000),context.self)
+            context.log.info(message.toString() + '\n')
             Behaviors.same
         }
     }

@@ -11,48 +11,38 @@ object IntegrateActor:
     
     def apply(): Behavior[Message] = Behaviors.receive { (context, message) =>
         val step: Double = (message.integral.r-message.integral.l)/message.integral.i
-        val values = Range(0,message.integral.i).map(message.integral.l + step/2 + step*_).map(message.integral.f(_)*step)
-        message.replyTo ! values.reduce(_ + _)
+        message match
+            case Message(integral, _) => integral match
+                case DefiniteIntegral(f, l, r, i) => {
+                    val values = Range(0,i).map(l + step/2 + step*_)
+                                           .map(f(_)*step)
+                    message.replyTo ! values.reduce(_ + _)
+                }
         Behaviors.same
     }
 
-
 object SumActor:
-    case class Message(t: Int, replyTo: ActorRef[Double])
-    
-    def apply():Behavior[Message|Double] = Behaviors.setup { (context) =>
-        var replyTo: Option[ActorRef[Double]] = None
+    def apply(maxSteps: Int, replyTo: ActorRef[Double]):Behavior[Double] = Behaviors.setup { (context) =>
         var sum: Double = 0
         var step: Int = 0
-        var maxSteps: Int = 0
         
         Behaviors.receiveMessage { (message) =>
-            message.match
-                case message: Message =>
-                    replyTo = Some(message.replyTo)
-                    sum = 0
-                    step = 0
-                    maxSteps = message.t
-                case a: Double =>
-                    step += 1
-                    sum += a
-                    if (step >= maxSteps) {
-                        replyTo.match
-                            case Some(value) => {value ! sum}
-                            case None => {}
-                        replyTo = None
-                        sum = 0
-                        step = 0
-                        maxSteps = 0
-                    }
-            Behaviors.same
+            sum += message
+            step += 1
+            if step<maxSteps
+                then {
+                    Behaviors.same
+                }
+                else {
+                    replyTo ! sum
+                    Behaviors.stopped
+                }
         }
     }
 
-object DoublePrinter: 
+object DoubleLogger: 
     def apply():Behavior[Double] = Behaviors.receive { (context, message) =>
-        print(message.toString())
-        print("\n")
+        context.log.info("received Double: " + message.toString())
         Behaviors.same
     }
 
@@ -61,14 +51,19 @@ object IntegrateSystem:
     
     def apply():Behavior[Message] = Behaviors.setup { (context) => 
         val integrateActor = context.spawn(IntegrateActor(), "integrateActor")
-        val sumActor = context.spawn(SumActor(), "sumActor")
+        var nOfMessages = 0
         
         Behaviors.receiveMessage { (message) =>
-            sumActor ! SumActor.Message(message.t,message.replyTo)
-            val step: Double = (message.integral.r-message.integral.l)/message.t
-            for (i <- Range(0,message.t)) {
-                integrateActor ! IntegrateActor.Message(DefiniteIntegral(message.integral.f,message.integral.l+i*step,message.integral.l+(i+1)*step,message.integral.i),sumActor)
-            }
+            val sumActor = context.spawn(SumActor(message.t,message.replyTo), "sumActor" + nOfMessages.toString())
+            nOfMessages += 1
+            message match
+            case Message(integral, t, _) => integral match
+                case DefiniteIntegral(f, l, r, i) => {
+                    val step: Double = (r-l)/t
+                    for (i2 <- Range(0,t)) {
+                        integrateActor ! IntegrateActor.Message(DefiniteIntegral(f,l+i2*step,l+(i2+1)*step,i),sumActor)
+                    }
+                }
             Behaviors.same
         }
     }
@@ -77,7 +72,8 @@ case class DefiniteIntegral(f: Double=>Double,l: Double,r: Double,i: Int)
 
 @main def main(): Unit = {
     val integrateSystem: ActorSystem[IntegrateSystem.Message] = ActorSystem(IntegrateSystem(), "integrateSystem")
-    val doublePrinter: ActorSystem[Double] = ActorSystem(DoublePrinter(), "doublePrinter")
+    val doubleLogger: ActorSystem[Double] = ActorSystem(DoubleLogger(), "doubleLogger")
 
-    integrateSystem ! IntegrateSystem.Message(DefiniteIntegral(_*0.5,1,2,10),10,doublePrinter)
+    integrateSystem ! IntegrateSystem.Message(DefiniteIntegral(_*0.5,1,2,10),10,doubleLogger)
+    integrateSystem ! IntegrateSystem.Message(DefiniteIntegral(_*0.5,0,1,10),10,doubleLogger)
 }
