@@ -3431,3 +3431,129 @@ WARNING: Unmatched cancel notification for request id 3247
 2024.11.19 10:11:41 INFO  time: compiled lab2 in 0.46s
 2024.11.19 10:13:04 INFO  compiling lab2 (1 scala source)
 2024.11.19 10:13:04 INFO  time: compiled lab2 in 0.4s
+2024.11.19 10:23:30 INFO  Shutting down server
+2024.11.19 10:23:30 INFO  shutting down Metals
+2024.11.19 10:23:30 INFO  Shut down connection with build server.
+2024.11.19 10:23:30 INFO  Shut down connection with build server.
+2024.11.19 10:23:30 INFO  Exiting server
+2024.11.24 13:29:21 INFO  Started: Metals version 1.3.5 in folders 'D:\funct\lab2' for client Visual Studio Code 1.95.3.
+SLF4J(W): Class path contains multiple SLF4J providers.
+SLF4J(W): Found provider [scribe.slf4j.ScribeServiceProvider@1b5a5870]
+SLF4J(W): Found provider [ch.qos.logback.classic.spi.LogbackServiceProvider@1aa05d44]
+SLF4J(W): See https://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J(I): Actual provider is of type [scribe.slf4j.ScribeServiceProvider@1b5a5870]
+2024.11.24 13:29:21 WARN  Flyway upgrade recommended: H2 2.3.230 is newer than this version of Flyway and support has not been tested. The latest supported version of H2 is 2.2.220.
+2024.11.24 13:29:23 INFO  no build target found for D:\funct\lab2\src\main\scala\Main.scala. Using presentation compiler with project's scala-library version: 3.3.3
+2024.11.24 13:29:23 INFO  Attempting to connect to the build server...
+2024.11.24 13:29:25 INFO  restarted 1 presentation compiler
+2024.11.24 13:29:28 INFO  tracing is disabled for protocol BSP, to enable tracing of incoming and outgoing JSON messages create an empty file at D:\funct\lab2\.metals\bsp.trace.json or C:\Users\Hyperion\AppData\Local\scalameta\metals\cache\bsp.trace.json
+2024.11.24 13:29:28 INFO  Attempting to connect to the build server...
+2024.11.24 13:29:28 INFO  tracing is disabled for protocol BSP, to enable tracing of incoming and outgoing JSON messages create an empty file at D:\funct\lab2\project\.metals\bsp.trace.json or C:\Users\Hyperion\AppData\Local\scalameta\metals\cache\bsp.trace.json
+2024.11.24 13:29:28 INFO  time: Connected to build server in 5.68s
+2024.11.24 13:29:28 INFO  Connected to Build server: Bloop v1.6.0
+2024.11.24 13:29:28 INFO  time: Imported build in 0.13s
+2024.11.24 13:29:28 INFO  running doctor check
+2024.11.24 13:29:28 INFO  java targets: lab2-build, lab2, lab2-test
+2024.11.24 13:29:32 WARN  Flyway upgrade recommended: H2 2.3.230 is newer than this version of Flyway and support has not been tested. The latest supported version of H2 is 2.2.220.
+2024.11.24 13:29:38 INFO  time: indexed workspace in 9.23s
+2024.11.24 13:30:28 INFO  compiling lab2 (1 scala source)
+2024.11.24 13:30:31 INFO  time: compiled lab2 in 2.5s
+2024.11.24 13:30:47 INFO  compiling lab2 (1 scala source)
+2024.11.24 13:30:47 INFO  time: compiled lab2 in 0.45s
+2024.11.24 13:31:05 INFO  compiling lab2 (1 scala source)
+2024.11.24 13:31:05 INFO  time: compiled lab2 in 0.33s
+Nov 24, 2024 1:31:17 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 262
+2024.11.24 13:35:09 INFO  compiling lab2 (1 scala source)
+2024.11.24 13:35:09 INFO  time: compiled lab2 in 0.19s
+Nov 24, 2024 1:37:52 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 831
+2024.11.24 13:38:39 INFO  compiling lab2 (1 scala source)
+2024.11.24 13:38:39 INFO  time: compiled lab2 in 0.17s
+2024.11.24 13:38:54 INFO  compiling lab2 (1 scala source)
+2024.11.24 13:38:54 INFO  time: compiled lab2 in 0.13s
+Nov 24, 2024 1:39:50 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report D:\funct\lab2\.metals\.reports\metals-full\2024-11-24\r_compiler-error_(lab2)_13-39-50-597.md
+2024.11.24 13:41:04 INFO  compiling lab2 (1 scala source)
+2024.11.24 13:41:04 INFO  time: compiled lab2 in 0.13s
+2024.11.24 13:43:08 INFO  compiling lab2 (1 scala source)
+2024.11.24 13:43:08 INFO  time: compiled lab2 in 0.3s
+Nov 24, 2024 1:44:33 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 1622
+2024.11.24 13:44:54 INFO  compiling lab2 (1 scala source)
+2024.11.24 13:44:54 INFO  time: compiled lab2 in 0.24s
+2024.11.24 13:45:39 INFO  compiling lab2 (1 scala source)
+2024.11.24 13:45:39 INFO  time: compiled lab2 in 0.24s
+2024.11.24 13:47:38 INFO  compiling lab2 (1 scala source)
+2024.11.24 13:47:38 INFO  time: compiled lab2 in 0.12s
+2024.11.24 13:47:42 INFO  compiling lab2 (1 scala source)
+2024.11.24 13:47:42 INFO  time: compiled lab2 in 0.24s
+Nov 24, 2024 1:48:03 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report D:\funct\lab2\.metals\.reports\metals-full\2024-11-24\r_compiler-error_(lab2)_13-48-03-192.md
+2024.11.24 13:48:46 INFO  compiling lab2 (1 scala source)
+2024.11.24 13:48:46 INFO  time: compiled lab2 in 0.24s
+2024.11.24 13:48:57 INFO  compiling lab2 (1 scala source)
+2024.11.24 13:48:58 INFO  time: compiled lab2 in 1.13s
+2024.11.24 13:52:19 INFO  compiling lab2 (1 scala source)
+2024.11.24 13:52:19 INFO  time: compiled lab2 in 0.14s
+2024.11.24 13:52:23 INFO  compiling lab2 (1 scala source)
+2024.11.24 13:52:23 INFO  time: compiled lab2 in 0.41s
+Nov 24, 2024 1:52:28 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 2724
+2024.11.24 13:53:10 INFO  compiling lab2 (1 scala source)
+2024.11.24 13:53:10 INFO  time: compiled lab2 in 0.38s
+Nov 24, 2024 2:00:02 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report D:\funct\lab2\.metals\.reports\metals-full\2024-11-24\r_compiler-error_(lab2)_14-00-02-483.md
+Nov 24, 2024 2:00:37 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report D:\funct\lab2\.metals\.reports\metals-full\2024-11-24\r_compiler-error_(lab2)_14-00-37-101.md
+2024.11.24 14:07:08 INFO  compiling lab2 (1 scala source)
+2024.11.24 14:07:08 INFO  time: compiled lab2 in 0.42s
+2024.11.24 14:09:47 INFO  compiling lab2 (1 scala source)
+2024.11.24 14:09:47 INFO  time: compiled lab2 in 0.32s
+2024.11.24 14:10:51 INFO  compiling lab2 (1 scala source)
+2024.11.24 14:10:51 INFO  time: compiled lab2 in 0.11s
+2024.11.24 14:11:24 INFO  compiling lab2 (1 scala source)
+2024.11.24 14:11:24 INFO  time: compiled lab2 in 0.27s
+2024.11.24 14:12:31 INFO  compiling lab2 (1 scala source)
+2024.11.24 14:12:31 INFO  time: compiled lab2 in 0.25s
+Nov 24, 2024 2:24:50 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 4126
+2024.11.24 14:25:21 INFO  compiling lab2 (1 scala source)
+2024.11.24 14:25:21 INFO  time: compiled lab2 in 0.22s
+2024.11.24 14:26:22 INFO  compiling lab2 (1 scala source)
+2024.11.24 14:26:22 INFO  time: compiled lab2 in 0.2s
+2024.11.24 14:27:53 INFO  compiling lab2 (1 scala source)
+2024.11.24 14:27:53 INFO  time: compiled lab2 in 0.18s
+2024.11.24 14:28:22 INFO  compiling lab2 (1 scala source)
+2024.11.24 14:28:22 INFO  time: compiled lab2 in 0.24s
+Nov 24, 2024 2:31:42 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report D:\funct\lab2\.metals\.reports\metals-full\2024-11-24\r_compiler-error_(lab2)_14-31-42-848.md
+Nov 24, 2024 2:31:49 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report D:\funct\lab2\.metals\.reports\metals-full\2024-11-24\r_compiler-error_(lab2)_14-31-49-751.md
+2024.11.24 14:32:32 INFO  compiling lab2 (1 scala source)
+2024.11.24 14:32:32 INFO  time: compiled lab2 in 0.18s
+Nov 24, 2024 2:33:27 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 5497
+Nov 24, 2024 2:33:30 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 5535
+Nov 24, 2024 2:33:30 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 5536
+Nov 24, 2024 2:34:26 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 5665
+Nov 24, 2024 2:34:37 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report D:\funct\lab2\.metals\.reports\metals-full\2024-11-24\r_compiler-error_(lab2)_14-34-37-727.md
+2024.11.24 14:35:44 INFO  compiling lab2 (1 scala source)
+2024.11.24 14:35:44 INFO  time: compiled lab2 in 0.18s
+2024.11.24 14:36:07 INFO  compiling lab2 (1 scala source)
+2024.11.24 14:36:07 INFO  time: compiled lab2 in 0.23s
+2024.11.24 14:38:08 INFO  compiling lab2 (1 scala source)
+2024.11.24 14:38:08 INFO  time: compiled lab2 in 0.23s
+2024.11.24 14:39:17 INFO  compiling lab2 (1 scala source)
+2024.11.24 14:39:17 INFO  time: compiled lab2 in 92ms
+2024.11.24 14:39:24 INFO  compiling lab2 (1 scala source)
+2024.11.24 14:39:24 INFO  time: compiled lab2 in 0.24s
+2024.11.24 14:51:24 INFO  Shutting down server
+2024.11.24 14:51:24 INFO  shutting down Metals
+2024.11.24 14:51:24 INFO  Shut down connection with build server.
+2024.11.24 14:51:24 INFO  Shut down connection with build server.
+2024.11.24 14:51:24 INFO  Exiting server

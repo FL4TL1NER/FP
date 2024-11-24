@@ -57,23 +57,20 @@ def goodEnoughPassword(password:String): Boolean = {
 // Try
 
 def goodEnoughPassword_v2(password:String): Either[Boolean, String] = {
-  var reqs: Map[String, Try[Boolean]] = Map("Password len is < 8"                 -> Try(password.length() >= 8),
-                                            "Password must have lowercase letter" -> Try(hasNSymbols(password,LOWERCASE_LETTERS,1)),
-                                            "Password must have uppercase letter" -> Try(hasNSymbols(password,UPPERCASE_LETTERS,1)),
-                                            "Password must have number"           -> Try(hasNSymbols(password,NUMBERS_LETTERS,1)),
-                                            "Password must have special symbol"   -> Try(hasNSymbols(password,SPECIAL_LETTERS,1)))
+  var reqs: Map[String, String => Boolean] = Map("Password len is < 8"                 -> (_.length() >= 8),
+                                                 "Password must have lowercase letter" -> (hasNSymbols(_,LOWERCASE_LETTERS,1)),
+                                                 "Password must have uppercase letter" -> (hasNSymbols(_,UPPERCASE_LETTERS,1)),
+                                                 "Password must have number"           -> (hasNSymbols(_,NUMBERS_LETTERS,1)),
+                                                 "Password must have special symbol"   -> (hasNSymbols(_,SPECIAL_LETTERS,1)))
   
-  if !reqs.filter((a,b) => b match {case Failure(exception) => true // если хоть один Failure то возвращаем Left(false)
-                                    case Success(value) => false})
-          .isEmpty then return Left(false)
-  
-  if reqs.filter((a,b) => b match {case Failure(exception) => true // 
-                                   case Success(value) => !value})
-          .isEmpty
-  then Left(true)
-  else Right(reqs.filter((a,b) => b match {case Failure(exception) => false
-                                           case Success(value) => !value})
-                 .map((a,b)=>a).fold("")(_ + _))
+
+  Try(reqs.map((a,b)=>(a,b(password)))) match
+    case Failure(exception) => Left(false)
+    case Success(value) => value.filter((a,b) => !b)
+                                .map((a,b)=>a)
+                                .fold("")(_ + " " + _) match
+      case "" => Left(true)
+      case value => Right(value)
 }
 
 // def readPassword(): Future[String]
