@@ -6,39 +6,49 @@ import akka.actor.typed.Behavior
 import akka.actor.typed.scaladsl.Behaviors
 import scala.util.Try
 
+import scala.math.*
+
 object IntegrateActor:
     case class Message(integral: DefiniteIntegral, replyTo: ActorRef[Double])
     
     def apply(): Behavior[Message] = Behaviors.receive { (context, message) =>
-        val step: Double = (message.integral.r-message.integral.l)/message.integral.i
         message match
-            case Message(integral, _) => integral match
-                case DefiniteIntegral(f, l, r, i) => {
-                    val values = Range(0,i).map(l + step/2 + step*_)
-                                           .map(f(_)*step)
-                    message.replyTo ! values.reduce(_ + _)
+            case Message(DefiniteIntegral(f, l, r, i), replyTo) => {
+                    val n = i*2
+                    val step: Double = (r-l)/n
+                    
+                    val values = Seq(f(l),
+                                     Range.inclusive(1,n/2-1)
+                                          .map(j => l + step*2*j)
+                                          .map(x => f(x))
+                                          .reduce(_ + _) * 4,
+                                     Range.inclusive(1,n/2)
+                                          .map(j => l + step*2*(j - 1))
+                                          .map(x => f(x))
+                                          .reduce(_ + _) * 2,
+                                     f(r)) 
+                    
+                    replyTo ! values.reduce(_ + _)*(step/3)
                 }
         Behaviors.same
     }
 
 object SumActor:
     def apply(maxSteps: Int, replyTo: ActorRef[Double]):Behavior[Double] = Behaviors.setup { (context) =>
-        var sum: Double = 0
-        var step: Int = 0
-        
+        receiver(0.0, maxSteps-1, replyTo)
+    }
+    
+    private def receiver(sum: Double, remainingSteps: Int, replyTo: ActorRef[Double]): Behavior[Double] =
         Behaviors.receiveMessage { (message) =>
-            sum += message
-            step += 1
-            if step<maxSteps
+            if remainingSteps>0
                 then {
-                    Behaviors.same
+                    receiver(sum + message, remainingSteps - 1, replyTo)
                 }
                 else {
                     replyTo ! sum
                     Behaviors.stopped
                 }
         }
-    }
 
 object DoubleLogger: 
     def apply():Behavior[Double] = Behaviors.receive { (context, message) =>
@@ -47,21 +57,27 @@ object DoubleLogger:
     }
 
 object IntegrateSystem:
-    case class Message(integral: DefiniteIntegral,t: Int, replyTo: ActorRef[Double])
+    case class Message(integral: DefiniteIntegral, t: Int,replyTo: ActorRef[Double])
     
     def apply():Behavior[Message] = Behaviors.setup { (context) => 
-        val integrateActor = context.spawn(IntegrateActor(), "integrateActor")
-        var nOfMessages = 0
+        val integrateActors = Seq(context.spawn(IntegrateActor(), "integrateActor0"),
+                                  context.spawn(IntegrateActor(), "integrateActor1"),
+                                  context.spawn(IntegrateActor(), "integrateActor2"),
+                                  context.spawn(IntegrateActor(), "integrateActor3"))
+        val nOfIntegrateActors = integrateActors.length
         
+        var nOfMessages = 0
         Behaviors.receiveMessage { (message) =>
-            val sumActor = context.spawn(SumActor(message.t,message.replyTo), "sumActor" + nOfMessages.toString())
-            nOfMessages += 1
             message match
-            case Message(integral, t, _) => integral match
-                case DefiniteIntegral(f, l, r, i) => {
+                case Message(DefiniteIntegral(f, l, r, i), t, replyTo) => {
+
+                    val sumActor = context.spawn(SumActor(t,replyTo), "sumActor" + nOfMessages.toString())
+                    nOfMessages += 1
+                    
                     val step: Double = (r-l)/t
                     for (i2 <- Range(0,t)) {
-                        integrateActor ! IntegrateActor.Message(DefiniteIntegral(f,l+i2*step,l+(i2+1)*step,i),sumActor)
+                        integrateActors(i2 % nOfIntegrateActors) ! IntegrateActor.Message(DefiniteIntegral(f,l+i2*step,l+(i2+1)*step,i),
+                                                                                          sumActor)
                     }
                 }
             Behaviors.same
@@ -74,6 +90,6 @@ case class DefiniteIntegral(f: Double=>Double,l: Double,r: Double,i: Int)
     val integrateSystem: ActorSystem[IntegrateSystem.Message] = ActorSystem(IntegrateSystem(), "integrateSystem")
     val doubleLogger: ActorSystem[Double] = ActorSystem(DoubleLogger(), "doubleLogger")
 
-    integrateSystem ! IntegrateSystem.Message(DefiniteIntegral(_*0.5,1,2,10),10,doubleLogger)
-    integrateSystem ! IntegrateSystem.Message(DefiniteIntegral(_*0.5,0,1,10),10,doubleLogger)
+    integrateSystem ! IntegrateSystem.Message(DefiniteIntegral(x => sin(x),0,Pi*2,100),100,doubleLogger)
+    integrateSystem ! IntegrateSystem.Message(DefiniteIntegral(x => x*0.5,0,2,100),100,doubleLogger)
 }

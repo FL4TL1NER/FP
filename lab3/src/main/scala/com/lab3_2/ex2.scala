@@ -20,10 +20,9 @@ object ActorServer:
 
 object ActorClient:
     def apply(serverRef: ActorRef[ActorServer.Message]): Behavior[Int] = Behaviors.setup { (context) =>
-        val server = serverRef
         val senderFuture: Future[Unit] = Future {
             while (true) {
-                server ! ActorServer.Message(Random.between(0,1000),Random.between(0,1000),context.self)
+                serverRef ! ActorServer.Message(Random.between(0,1000),Random.between(0,1000),context.self)
                 Thread.sleep(1000)
             }
         }
@@ -38,7 +37,6 @@ object MyActorSystem:
     def apply(): Behavior[Message] = Behaviors.setup{ (context) =>
         val server = context.spawn(ActorServer(),"server")
         val client = context.spawn(ActorClient(server),"client")
-        client ! 0
         
         Behaviors.empty
     }
