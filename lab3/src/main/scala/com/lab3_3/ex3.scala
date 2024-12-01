@@ -45,7 +45,7 @@ object SumActor:
                     receiver(sum + message, remainingSteps - 1, replyTo)
                 }
                 else {
-                    replyTo ! sum
+                    replyTo ! sum + message
                     Behaviors.stopped
                 }
         }
